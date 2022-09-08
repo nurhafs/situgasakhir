@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <link rel="shortcut icon" type="image/png" th:href="@{img/makara-ui-farmasi.png}">
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+</head>
+
+<body id="body-pd">
+    <nav th:replace="fragments/fragment :: navbar('lamaran')"></nav>
+    <div class="content container">
+            <h2 th:text="'Anda tidak memilih lamaran apapun'"></h2>
+            <br> <br> <br> <br>
+            <div class="card align-items-center" style="width: 100%; padding: 0px; margin: 0px; border-radius:10px; border-color:transparent">
+                <a class="btn btn-outline-color" href="/admin/daftar-lamaran">Kembali</a>
+            </div>
+    </div>
+</body>
+</html>

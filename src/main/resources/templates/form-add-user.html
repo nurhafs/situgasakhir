@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <link rel="shortcut icon" type="image/png" th:href="@{img/makara-ui-farmasi.png}">
+    <meta charset="UTF-8">
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+</head>
+<body>
+<nav th:replace="fragments/fragment :: navbar('home')"></nav>
+<div class="content container">
+    <div class="card m-4 p-4">
+        <div class="justify-content-center">
+            <h2 style="font-weight: bold;">Tambah User Baru</h2>
+            <div th:if="${message}" th:text="${message}" class="alert alert-danger" role="alert"></div>
+            <br>
+            <form th:action="@{/user/add}" th:object="${Pengguna}" method="POST">
+
+                <label>Username</label>
+                <input required type="text" name="username" class="form-control" />
+
+                <label>Password</label>
+                <input required type="password" name="password" class="form-control"/>
+
+                <label>Role</label>
+                <select name="role" class="form-control">
+                    <option th:each="role : ${listRole}" th:value="${role.id}" th:text="${role.nama}"></option>
+                </select>
+
+                <label>Program Studi</label>
+                <select name="prodiPengguna" class="form-control">
+                    <option th:value="@{null}"></option>
+                    <option th:each="prodi : ${listProdi}" th:value="${prodi.id}" th:text="${prodi.nama}"></option>
+                </select>
+                <br>
+
+                <button type="submit" class="mx-2 btn btn-first-user float-right">Simpan</button>
+                <a class="btn btn-second-user" th:href="@{/user/view-all}">Batal</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

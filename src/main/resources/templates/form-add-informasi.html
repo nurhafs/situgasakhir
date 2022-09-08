@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/png" th:href="@{img/makara-ui-farmasi.png}">
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+
+    <!-- <link th:href="@{/css/berkas.css}" rel="stylesheet"> -->
+    <!-- include summernote css/js -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+
+</head>
+<body id="body-pd">
+<nav th:replace="fragments/fragment :: navbar('addinfo')"></nav>
+<div class="content container">
+    <br><br>
+    <div class="card m-4 p-4">
+            <div class="justify-content-center">
+                <h2 style="font-weight: bold;">Tambah Informasi</h2>
+                <br>
+                <div th:if="${message}" th:text="${message}" class="alert alert-danger" role="alert"></div>
+                <br>
+                <form th:action="@{/informasi/tambah}" th:object="${informasi}" method="POST" enctype="multipart/form-data">
+
+                    <input type="hidden" class="form-control" name="id" th:value=0>
+
+                    Judul Informasi <span style="color:red;">*</span><br>
+                    <p style="color:red;">Maksimal judul 50 karakter.</p>
+                    <input class="form-control" type="text" th:maxlength="50" name="judul" required/>
+                    <br>
+
+                    Isi Informasi <span style="color:red;">*</span><br>
+                    <textarea type="text" rows="4" id="isi" name="isi" placeholder="Masukkan isi informasi disini" class="form-control" autocomplete="off" style="background-color: white;" ></textarea>
+                    <br>
+
+                    Apakah Informasi Ditujukan Untuk Mahasiswa S1? <span style="color:red;">*</span><br>
+                    <div>
+                        <input required type="radio" name="isS1" value=1>
+                        <label>Ya</label>
+                        <br>
+                        <input type="radio" name="isS1" value=0>
+                        <label>Tidak</label>
+                    </div>
+                    <br>
+
+                    Apakah Informasi Ditujukan Untuk Mahasiswa S2? <span style="color:red;">*</span><br>
+                    <div>
+                        <input required type="radio" name="isS2" value=1>
+                        <label>Ya</label>
+                        <br>
+                        <input type="radio" name="isS2" value=0>
+                        <label>Tidak</label>
+                    </div>
+                    <br>
+
+                    Apakah Informasi Ditujukan Untuk Mahasiswa S3? <span style="color:red;">*</span><br>
+                    <div>
+                        <input required type="radio" name="isS3" value=1>
+                        <label>Ya</label>
+                        <br>
+                        <input type="radio" name="isS3" value=0>
+                        <label>Tidak</label>
+                    </div>
+                    <br>
+
+                    Apakah Informasi Ditujukan Untuk Mahasiswa Apoteker? <span style="color:red;">*</span><br>
+                    <div>
+                        <input required type="radio" name="isApoteker" value=1>
+                        <label>Ya</label>
+                        <br>
+                        <input type="radio" name="isApoteker" value=0>
+                        <label>Tidak</label>
+                    </div>
+                    <br>
+
+                        <div class="box">
+                            <div class="box-header with-border">
+                                <div><b>Upload File</b></div>
+                            </div>
+                            <span style="color:red;">
+                                <p>Catatan: Maksimal size : 30MB</p>
+                            </span>
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+
+                                        <div class="preview-zone hidden">
+                                            <div class="box box-solid">
+                                                <div class="box-header with-border">
+                                                    <div><b>Preview</b></div>
+                                                    <div class="box-tools pull-right">
+                                                        <button type="button" class="btn btn-color-2 btn-xs remove-preview">
+                                                            <i class="fa fa-times"></i> Hapus file
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="box-body"></div>
+                                            </div>
+                                        </div>
+                                        <div class="dropzone-wrapper">
+                                            <div class="dropzone-desc">
+                                                <i class="glyphicon glyphicon-download-alt"></i>
+                                                <p>Pilih file atau <i>drag</i> ke sini.</p>
+                                            </div>
+                                            <input type="file" id="input-file-now" class="dropzone form-control form-control-lg file-upload" name="fileInformasi" data-max-file-size="30M"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+
+                    <button type="button" class="btn btn-color" data-bs-toggle="modal" data-bs-target="#confirm">Simpan</button>
+                    <a class="btn btn-outline-color" href="/informasi?page=1">Batal</a>
+                    <div th:replace="fragments/fragment :: modal"></div>
+
+                </form>
+            </div>
+    </div>
+</div>
+
+<script>
+    $('#isi').summernote({
+        placeholder: 'Masukkan isi informasi disini',
+        lang: 'id-ID',
+        tabsize: 2,
+        height: 400,
+        styleTags: [
+            'p',
+            { title: 'Blockquote', tag: 'blockquote', className: 'blockquote', value: 'blockquote' },
+            'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
+        ],
+        toolbar: [
+            ['fontsize', ['fontsize']], ['fontname', ['fontname']],  ['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+            ['para', ['ul', 'ol', 'paragraph']],  ['height', ['height']],  ['color', ['color']],['float', ['floatLeft', 'floatRight', 'floatNone']],['remove', ['removeMedia']],['table', ['table']],['insert', ['link', 'unlink', 'picture', 'video', 'hr']], ['view', ['fullscreen', 'codeview']], ['help', ['help']] ],
+    });
+</script>
+<script type="text/javascript" th:src="@{/js/addBerkas.js}"></script>
+</body>
+</html>

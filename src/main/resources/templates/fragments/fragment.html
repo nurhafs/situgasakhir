@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+
+<head>
+    <head th:fragment="css">
+        <title>Tugas Akhir - Farmasi</title>
+        <meta charset="UTF-8">
+        <link rel="icon" type="image/png" th:href="@{img/makara-ui-farmasi.png}">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <link rel="stylesheet" th:href="@{/css/fragment.css}"/>
+        <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+    </head>
+    <head th:fragment="js">
+        <meta charset="UTF-8">
+        <link rel="icon" type="image/png" th:href="@{img/makara-ui-farmasi.png}">
+        <script th:src="@{/js/fullcalendar/main.js}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+        <script th:src="@{/js/bootstrap.min.js}"></script>
+        <link th:href="@{/js/fullcalendar/main.css}" rel='stylesheet' />
+        <link th:href="@{/css/calendar.css}" rel="stylesheet">
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function(event) {
+
+                const showNavbar = (toggleId, navId, bodyId, headerId) =>{
+                    const toggle = document.getElementById(toggleId),
+                        nav = document.getElementById(navId),
+                        bodypd = document.getElementById(bodyId),
+                        headerpd = document.getElementById(headerId)
+
+                    // Validate that all variables exist
+                    if(toggle && nav && bodypd && headerpd){
+                        toggle.addEventListener('click', ()=>{
+                            // show navbar
+                            nav.classList.toggle('muncul')
+                            // change icon
+                            toggle.classList.toggle('bx-x')
+                            // add padding to body
+                            bodypd.classList.toggle('body-pd')
+                            // add padding to header
+                            headerpd.classList.toggle('body-pd')
+                        })
+                    }
+                }
+
+                showNavbar('header-toggle','nav-bar','body-pd','header')
+
+                /*===== LINK ACTIVE =====*/
+                const linkColor = document.querySelectorAll('.nav_link')
+
+                function colorLink(){
+                    if(linkColor){
+                        linkColor.forEach(l=> l.classList.remove('active'))
+                        this.classList.add('active')
+                    }
+                }
+                linkColor.forEach(l=> l.addEventListener('click', colorLink))
+
+                // Your code to run since DOM is loaded and ready
+            });
+        </script>
+    </head>
+</head>
+
+<body>
+<div th:fragment="navbar(page)">
+    <header class="header" id="header">
+        <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
+        <div class="header_img">
+            <a sec:authorize="hasAuthority('Mahasiswa')" href="/mahasiswa/profil">
+                <img src="https://i.pinimg.com/custom_covers/222x/85498161615209203_1636332751.jpg" alt="">
+            </a>
+            <a sec:authorize="hasAuthority('Admin Prodi')" href="/admin/profil">
+                <img src="https://i.pinimg.com/custom_covers/222x/85498161615209203_1636332751.jpg" alt="">
+            </a>
+            <a sec:authorize="hasAuthority('Dosen')" href="/dosen/profil">
+                <img src="https://i.pinimg.com/custom_covers/222x/85498161615209203_1636332751.jpg" alt="">
+            </a>
+        </div>
+    </header>
+    <div class="l-navbar" id="nav-bar">
+        <nav class="nav">
+            <div>
+                <a href="/informasi?page=1" class="nav_logo">
+                    <i class='bx bx-home-alt-2 nav_logo-icon'></i>
+                    <span class="nav_logo-name">SITUGASAKHIR</span>
+                </a>
+                <div class="nav_list" id="nav_list">
+                    <a href="/informasi?page=1" class="nav_link" th:classappend="${page == 'home'} ? active : ''">
+                        <i class='bx bx-grid-alt nav_icon'></i>
+                        <span class="nav_name">Beranda</span>
+                    </a>
+                    <div sec:authorize="hasAnyAuthority('Admin Prodi', 'Admin Fakultas')" th:if="${role != 'Mahasiswa'}">
+                        <a href="/admin/daftar-lamaran" th:classappend="${page == 'lamaran'} ? active : ''" class="nav_link">
+                            <i class='bx bx-food-menu nav_icon'></i>
+                            <span class="nav_name">Lamaran</span>
+                        </a>
+                    </div>
+                    <div sec:authorize="hasAnyAuthority('Admin Prodi', 'Admin Fakultas')" th:if="${role != 'Mahasiswa'}">
+                        <a href="/mahasiswa" th:classappend="${page == 'mahasiswa'} ? active : ''" class="nav_link">
+                            <i class='bx bxs-graduation nav_icon'></i>
+                            <span class="nav_name">Mahasiswa</span>
+                        </a>
+                    </div>
+                    <div sec:authorize="hasAuthority('Mahasiswa')">
+                        <a href="/tugasakhir" th:classappend="${page == 'tugasakhir'} ? active : ''" class="nav_link">
+                            <i class='bx bx-book-open nav_icon'></i>
+                            <span class="nav_name">Tugas Akhir</span>
+                        </a>
+                    </div>
+                    <div sec:authorize="hasAnyAuthority('Admin Prodi', 'Admin Fakultas')">
+                        <a href="/tugasakhir/berkas/viewall" th:classappend="${page == 'tugasakhir'} ? active : ''" class="nav_link">
+                            <i class='bx bx-book-open nav_icon'></i>
+                            <span class="nav_name">Tugas Akhir</span>
+                        </a>
+                    </div>
+
+                    <a href="/dosen/lihat-dosbing" th:classappend="${page == 'dosbing'} ? active : ''" class="nav_link">
+                        <i class='bx bx-group nav_icon'></i>
+                        <span class="nav_name">Dosen Pembimbing</span>
+                    </a>
+
+                    <!-- <a data-bs-toggle="collapse" data-bs-target="#menu_item2" href="#" aria-expanded="true" th:classappend="${page == 'dosbing'} ? active : ''" class="nav_link">
+                        <i class='bx bx-group nav_icon'></i>
+                        <span class="nav_name">Dosen Pembimbing</span>
+                    </a>
+                    <ul id="menu_item2" class="submenu collapse" data-bs-parent="#nav_list">
+                        <li class="li-bar"><a class="nav-link" href="/dosen/lihat-dosbing">Lihat Semua </a></li>
+                        <li class="li-bar"><a class="nav-link" href="/dosen/tambah"> Tambah </a></li>
+                    </ul> -->
+
+                    <div sec:authorize="hasAnyAuthority('Admin Prodi', 'Admin Fakultas', 'Dosen')">
+                        <a href="/jadwal" th:classappend="${page == 'jadwal'} ? active : ''" class="nav_link">
+                            <i class='bx bx-calendar nav_icon'></i>
+                            <span class="nav_name">Jadwal</span>
+                        </a>
+                    </div>
+                    <div sec:authorize="hasAnyAuthority('Admin Prodi', 'Admin Fakultas')">
+                        <a href="/admin/laporan" th:classappend="${page == 'laporan'} ? active : ''" class="nav_link">
+                            <i class='bx bx-line-chart nav_icon'></i>
+                            <span class="nav_name">Laporan</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <a href="/logout" class="nav_link">
+                <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">Sign Out</span> </a>
+        </nav>
+    </div>
+</div>
+
+<div th:fragment="modal">
+    <div class="modal fade" id="confirm" style="width: 100%" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Konfirmasi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Apakah anda yakin?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-color-2" data-bs-dismiss="modal">Batal</button>
+                    <button class="btn btn-color" type="submit" name="action">Lanjutkan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:fragment="footer">
+    <div style="flex: 1;"></div>
+    <footer class="footer">
+
+    </footer>
+</div>
+</body>
+</html>

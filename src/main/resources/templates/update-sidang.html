@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <link rel="shortcut icon" type="image/png" th:href="@{img/makara-ui-farmasi.png}">
+  <meta charset="UTF-8">
+  <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+  <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+</head>
+<body id="body-pd">
+    <nav th:replace="fragments/fragment :: navbar('jadwal')"></nav>
+    <div class="content container">
+        <div class="card">
+            <div class="card-header text-white bg-secondary">
+                <center><h4><b>Ubah Sidang</b></h4></center>
+            </div>
+            <div class="card-body">
+                <center><h2
+                        th:text="'Sidang berhasil diubah'">
+
+                </h2></center>
+            </div>
+        </div>
+        <br>
+        <a th:href="@{/jadwal/sidang/detail/} + ${idSidang}" class="btn btn-color">Kembali</a>
+</body>

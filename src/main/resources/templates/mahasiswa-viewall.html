@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<head>
+    <link rel="shortcut icon" type="image/png" th:href="@{img/makara-ui-farmasi.png}">
+    <meta charset="UTF-8">
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+</head>
+
+<body id="body-pd">
+<div class="content container">
+<nav th:replace="fragments/fragment :: navbar('mahasiswa')"></nav>
+            <div class="justify-content-center">
+                <h2 style="font-weight: bold;">Daftar Seluruh Mahasiswa</h2>
+                <br><br>
+                <div th:if="*{listMahasiswa.size() != 0}">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>Nomor</th>
+                            <th>Nama Mahasiswa</th>
+                            <th>Program Studi</th>
+                            <th>NPM</th>
+                            <th>Detail</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="mahasiswa, iterationStatus : ${listMahasiswa}"
+                        th:style="${iterationStatus.even} ? 'background-color: #F7F6FB;'">
+                            <td th:text="${iterationStatus.count}"></td>
+                            <td th:text="${mahasiswa.getUsername()}"></td>
+                            <td th:text="${mahasiswa.getPenggunaMahasiswa().getProdiPengguna().getNama()}"></td>
+                            <td th:text="${mahasiswa.getNpm()}"></td>
+                            <div>
+                                <td><a class="btn btn-color" th:href="@{'/mahasiswa/detail/' + ${mahasiswa.getPenggunaMahasiswa().getUsername()}}">Detail</a></td>
+                            </div>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div th:unless="*{listMahasiswa.size() != 0}">
+                    <div class="alert alert-warning text-center" role="alert">
+                        <h7 class="text-center" th:text="'Belum ada mahasiswa yang mengambil mata kuliah Tugas Akhir'"></h7>
+                    </div>
+                </div>
+                <br>
+                <a class="btn btn-outline-color" href="/informasi?page=1">Kembali</a>
+</div>
+</body>
+</html>

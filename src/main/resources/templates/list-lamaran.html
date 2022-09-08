@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <link rel="shortcut icon" type="image/png" th:href="@{img/makara-ui-farmasi.png}">
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+
+<body id="body-pd">
+    <nav th:replace="fragments/fragment :: navbar('lamaran')"></nav>
+    <div class="content container">
+                <div th:if="*{listLamaran.size() != 0}">
+                    <h2 style="font-weight:bold; color:#3B3B3B">Daftar Lamaran</h2>
+                    <form th:action="@{/admin/daftar-lamaran}" method="GET">
+                        <table class="table table-borderless">
+                            <thead>
+                                <tr>
+                                    <th><label>Nama Dosen</label></th>
+                                    <th><label>Program Studi</label></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="col-lg-8">
+                                        <select name="namaDosen" class="form-select">
+                                            <option th:value="@{null}"></option>
+                                            <option th:each="dosen : ${listDosen}" th:value="${dosen.id}" th:text="${dosen.nama}"></option>
+                                        </select>
+                                    </td>
+                                    <td class="col-lg-3">
+                                        <select name="programStudi" class="form-select">
+                                            <option th:value="@{null}"></option>
+                                            <option th:each="prodi : ${listProdi}" th:value="${prodi.id}" th:text="${prodi.nama}"></option>
+                                        </select>
+                                    </td>
+                                    <td class="col-lg-1"><button type="submit" class="btn btn-color">Cari</button></td>
+                                </tr>
+                            </tbody>
+                        </table>            
+                    </form>
+                    <form th:action="@{/admin/setuju}" id="formfield" th:object="${cont}" method="POST">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="width:4%">Pilih</th>
+                                    <th>Tanggal</th>
+                                    <th>Waktu</th>
+                                    <th>Nama</th>
+                                    <th>NPM</th>
+                                    <th style="width:10%">Program Studi</th>
+                                    <th>Dosen</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="lamaran, iterationStatus : ${listLamaran}"
+                                th:style="${iterationStatus.even} ? 'background-color: #F7F6FB;'">
+                                        <td style="text-align:center">
+                                            <input class="form-check-input" type="checkbox" th:field="*{semua}" th:value="${lamaran.id}" id="flexCheckDefault">
+                                        </td>
+                                        <td th:text="${lamaran.tanggal}"></td>
+                                        <td th:text="${lamaran.waktu}"></td>
+                                        <td th:text="${lamaran.lamaranMahasiswa.username}"></td>
+                                        <td th:text="${lamaran.lamaranMahasiswa.npm}"></td>
+                                        <td th:text="${lamaran.lamaranMahasiswa.penggunaMahasiswa.prodiPengguna.nama}"></td>
+                                        <td th:text="${lamaran.lamaranDosen.nama}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div style="text-align: left;">
+                            <button type="button" class="btn btn-color" id="approval" data-bs-toggle="modal" data-bs-target="#confirm">
+                                Setuju
+                              </button>
+                            <button type="button" class="btn btn-danger" id="rejection" data-bs-toggle="modal" data-bs-target="#reject">
+                            Tolak
+                            </button>
+                            <a class="btn btn-outline-color" href="/informasi?page=1">Kembali</a>
+                        </div>
+                        
+                        <div th:replace="fragments/fragment :: modal"></div>
+
+                        <!-- Modal Tolak -->
+                        <div class="modal fade" id="reject" style="width: 100%" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Konfirmasi</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Apakah anda yakin?
+                                        </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-color-2" data-bs-dismiss="modal">Batal</button>
+                                        <button class="btn btn-color" type="submit" name="action" th:formaction="@{/admin/tolak}">Lanjutkan</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </form>
+                
+                </div>
+            <div th:unless="*{listLamaran.size() != 0}">
+                <h2 style="font-weight:bold; color:#3B3B3B">Daftar Lamaran</h2>
+                <form th:action="@{/admin/daftar-lamaran}" method="GET">
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <th><label>Nama Dosen</label></th>
+                                <th><label>Program Studi</label></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="col-lg-8">
+                                    <select name="namaDosen" class="form-select">
+                                        <option th:value="@{null}"></option>
+                                        <option th:each="dosen : ${listDosen}" th:value="${dosen.id}" th:text="${dosen.nama}"></option>
+                                    </select>
+                                </td>
+                                <td class="col-lg-3">
+                                    <select name="programStudi" class="form-select">
+                                        <option th:value="@{null}"></option>
+                                        <option th:each="prodi : ${listProdi}" th:value="${prodi.id}" th:text="${prodi.nama}"></option>
+                                    </select>
+                                </td>
+                                <td class="col-lg-1"><button type="submit" class="btn btn-color">Cari</button></td>
+                            </tr>
+                        </tbody>
+                    </table>            
+                </form>
+                <br><br>
+                <div class="d-flex flex-column align-items-center">
+                    <h2 class="p-1 text-center" style="color: grey; font-size: 40px; font-weight: bold;" th:text="'Tidak ada Lamaran'"></h2>
+                </div>
+            </div>
+
+            <!-- Button trigger modal -->
+
+        <br> <br>
+        
+    </div>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script> -->
+    <script>
+        var inputs = document.getElementsByTagName('input');
+        for (var i=0; i<inputs.length; i++)  {
+        if (inputs[i].type == 'checkbox')   {
+            inputs[i].checked = false;
+        }
+        }
+    </script>
+    
+    <script>
+        var checkBoxes = $('tbody .form-check-input');
+        checkBoxes.change(function () {
+            $('#approval').prop('disabled', checkBoxes.filter(':checked').length < 1);
+        });
+        checkBoxes.change();
+    </script>
+        <script>
+            var checkBoxes = $('tbody .form-check-input');
+            checkBoxes.change(function () {
+                $('#rejection').prop('disabled', checkBoxes.filter(':checked').length < 1);
+            });
+            checkBoxes.change();
+        </script>
+      
+</body>
+
+
+</html>

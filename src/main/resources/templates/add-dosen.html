@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <link rel="shortcut icon" type="image/png" th:href="@{img/makara-ui-farmasi.png}">
+    <meta charset="UTF-8">
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+</head>
+<body id="body-pd">
+<nav th:replace="fragments/fragment :: navbar('dosbing')"></nav>
+<div class="content container">
+    <div class="card m-4 p-4">
+            <div class="justify-content-center">
+                <h2 th:text="'Dosen dengan nama ' + ${namaDosen} + ' berhasil ditambahkan ke sistem.'"></h2>
+                <br>
+                <a class="btn btn-color" href="/">Home</a>
+            </div>
+    </div>
+</div>
+</body>
+
+</html>

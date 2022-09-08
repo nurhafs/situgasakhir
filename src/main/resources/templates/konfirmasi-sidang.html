@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <link rel="shortcut icon" type="image/png" th:href="@{img/makara-ui-farmasi.png}">
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+
+<body id="body-pd">
+    <nav th:replace="fragments/fragment :: navbar"></nav>
+    <div class="content container" style="padding-top:48px">
+        <div th:if="*{semuaSidang.size() != 0}">
+            <h2 class="text-center" style="font-weight:bold; color:#3B3B3B">Sidang Untuk Dikonfirmasi</h2>
+            <br>
+            <form th:action="@{/sidang/konfirmasi/setuju}" id="formfield" method="POST">
+                <table class="table table-hover">
+                    <thead class="bg-dark" style="color:white">
+                        <tr>
+                            <th>Tanggal</th>
+                            <th>Jenis</th>
+                            <th>NPM</th>
+                            <th>Program Studi</th>
+                            <th>Waktu Mulai</th>
+                            <th>Waktu Selesai</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="sidang, iterationStatus : ${semuaSidang}"
+                        th:style="${iterationStatus.even} ? 'background-color: #F7F6FB;'">
+                            <td th:text="${sidang.tanggal}"></td>
+                            <td th:text="${sidang.jenisSidang.nama}"></td>
+                            <td th:text="${sidang.mahasiswaSidang.npm}"></td>
+                            <td th:text="${sidang.mahasiswaSidang.penggunaMahasiswa.prodiPengguna.nama}"></td>
+                            <td th:text="${sidang.waktuMulai}"></td>
+                            <td th:text="${sidang.waktuSelesai}"></td>
+                            <td>
+                                <button type="button" class="btn btn-color" data-bs-toggle="modal" data-bs-target="#detail">Konfirmasi</button>
+                                <!-- Modal  -->
+                                <div class="modal fade" id="detail" style="width: 100%" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Konfirmasi</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h3>Detail Sidang</h3>
+                                                    <table class="table table-striped">
+                                                        <tr>
+                                                            <td>Mahasiswa</td>
+                                                            <td th:text="${sidang.mahasiswaSidang.username}"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Jenis Sidang</td>
+                                                            <td th:text="${sidang.jenisSidang.nama}"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Tanggal</td>
+                                                            <td th:text="${sidang.tanggal}"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Waktu Mulai</td>
+                                                            <td th:text="${sidang.waktuMulai}"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Waktu Selesai</td>
+                                                            <td th:text="${sidang.waktuSelesai}"></td>
+                                                        </tr>
+                                                    </table>
+
+                                                </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-color-2" data-bs-dismiss="modal">Kembali</button>
+                                                <button class="btn btn-color" type="submit" name="action" th:formaction="@{/sidang/konfirmasi/tolak}">Tolak</button>
+                                                <button class="btn btn-color" type="submit" name="action">Terima</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+</body>

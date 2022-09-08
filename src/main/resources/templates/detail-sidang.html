@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <link rel="shortcut icon" type="image/png" th:href="@{img/makara-ui-farmasi.png}">
+    <meta charset="UTF-8">
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+</head>
+<body id="body-pd">
+<nav th:replace="fragments/fragment :: navbar('jadwal')"></nav>
+<div class="content container">
+    <div class="card m-4 p-4">
+            <div class="justify-content-center">
+                <h2 style="font-weight: bold;">Detail Sidang</h2>
+                <br>
+                <p th:text="'Id sidang : ' + ${sidang.id}"></p>
+                <p th:text="'Jenis sidang : ' + ${sidang.jenisSidang.nama}"></p>
+                <p th:text="'Mahasiswa :  ' + ${sidang.mahasiswaSidang.username}"></p>
+                <p th:text="'Tanggal :  ' + ${sidang.tanggal}"></p>
+                <p th:text="'Waktu mulai :  ' + ${sidang.waktuMulai}"></p>
+                <p th:text="'Waktu selesai :  ' + ${sidang.waktuSelesai}"></p>
+<!--                <p th:text="'Hasil :  ' + ${sidang.hasil}"></p>-->
+                <div class="col">
+                    <div th:if="*{listPartisipanSidang.size() != 0}">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Nama Dosen</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="partisipanSidang, iterationStatus : ${listPartisipanSidang}"
+                                th:style="${iterationStatus.even} ? 'background-color: #F7F6FB;'">
+                                <td th:text="${iterationStatus.count}"></td>
+                                <td th:text="${partisipanSidang.partisipanSidangDosen.nama}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <form th:action="@{/jadwal/sidang/hapus/} + ${sidang.id}" method="POST">
+                <a class="btn btn-warning md-4" th:href="@{/jadwal/sidang/ubah/} + ${sidang.id}">Ubah Sidang</a>
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete">
+                    Hapus
+                    </button>
+                    <div class="modal fade" id="delete" style="width: 100%" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Konfirmasi</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Apakah anda yakin?
+                                </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-color-2" data-bs-dismiss="modal">Batal</button>
+                                <button class="btn btn-color" type="submit" name="action" th:formaction="@{/jadwal/sidang/hapus/} + ${sidang.id}">Lanjutkan</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a class="btn btn-outline-color md-4" href="/jadwal">Kembali</a>
+                <!-- <div th:replace="fragments/fragment :: modal"></div> -->
+            </form>
+    </div>
+</div>
+<div th:replace="fragments/fragment :: footer"></div>
+</body>
+</html>

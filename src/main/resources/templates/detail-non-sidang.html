@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <link rel="shortcut icon" type="image/png" th:href="@{img/makara-ui-farmasi.png}">
+    <meta charset="UTF-8">
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+</head>
+
+<body id="body-pd">
+<nav th:replace="fragments/fragment :: navbar('jadwal')"></nav>
+<div class="content container">
+        <div class="card m-4 p-4">
+                <div class="justify-content-center">
+                    <h2 style="font-weight: bold;">Detail Jadwal Kegiatan</h2>
+                    <br>
+                    <table class="table table-borderless">
+                        <tbody>
+                        <tr>
+                            <td>Nama Dosen</td>
+                            <td th:text="': '+${jadwalNonSidang.getDosen().getNama()}"></td>
+                        </tr>
+                        <tr>
+                            <td>Jenis Kegiatan</td>
+                            <td th:text="': '+${jadwalNonSidang.getKeperluan().getNama()}"></td>
+                        </tr>
+                        <tr>
+                            <td>Tanggal Mulai</td>
+                            <td th:text="': '+${#dates.format(jadwalNonSidang.getTanggalMulai(), 'dd-MM-yyyy')}"></td>
+                        </tr>
+                        <tr>
+                            <td>Tanggal Selesai</td>
+                            <td th:text="': '+${#dates.format(jadwalNonSidang.getTanggalSelesai(), 'dd-MM-yyyy')}"></td>
+                        </tr>
+                        <tr>
+                            <td>Waktu Mulai</td>
+                            <td th:text="': '+${jadwalNonSidang.getWaktuMulai()}"></td>
+                        </tr>
+                        <tr>
+                            <td>Waktu Selesai</td>
+                            <td th:text="': '+${jadwalNonSidang.getWaktuSelesai()}"></td>
+                        </tr>
+                        <tr>
+                            <td>Informasi Tambahan</td>
+                            <td th:text="': '+${jadwalNonSidang.getDeskripsi()}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <br>
+                </div>
+                <div style="text-align:left">
+                    <a class="btn btn-color" th:href="@{/jadwal/non-sidang/ubah/} + ${jadwalNonSidang.getId()}">Ubah</a>
+                    <a type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete">
+                        Hapus
+                    </a>
+                    <a class="btn btn-outline-color" href="/jadwal">Kembali</a>
+                </div>
+                <div class="modal fade" id="delete" style="width: 100%" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Konfirmasi</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">x</button>
+                            </div>
+                            <div class="modal-body">
+                                Apakah anda yakin?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-color-2" data-bs-dismiss="modal">Batal</button>
+                                <a class="btn btn-color" th:href="@{/jadwal/non-sidang/delete/} + ${jadwalNonSidang.getId()}">Lanjutkan</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+        </div>
+    </div>
+</body>
+</html>

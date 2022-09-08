@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <link rel="shortcut icon" type="image/png" th:href="@{img/makara-ui-farmasi.png}">
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+</head>
+
+<body id="body-pd">
+<nav th:replace="fragments/fragment :: navbar('dosbing')"></nav>
+<div class="content container" style="padding-top:48px">
+<div class="container">
+    <div class="card-body">
+        <div class="justify-content-center">
+            <div th:if="*{listDosbing.size() != 0}">
+                <h2 class="text-center" style="font-weight:bold; color:#3B3B3B">Daftar Dosen Pembimbing</h2>
+                <br>
+                <br>
+                <table class="table table-hover" style="text-align: center;">
+                    <thead class="table-dark" style="color:white">
+                    <tr style="text-align: center;">
+                        <th scope="col">No</th>
+                        <th scope="col">Nama Dosen</th>
+                        <th scope="col">Kuota Bimbingan</th>
+                        <th scope="col">Kuota Tersisa</th>
+                        <th scope="col">Jumlah Pendaftar</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="dosbing, iterationStatus : ${listDosbing}"
+                    th:style="${iterationStatus.even} ? 'background-color: #F7F6FB;'">
+                        <td th:text="${iterationStatus.count}"></td>
+                        <td th:text="${dosbing.nama}"></td>
+                        <td th:text="10"></td>
+                        <td th:text="${10-dosbing.jumlahMahasiswa}"></td>
+                        <td th:text="${dosbing.jumlahPelamar}"></td>
+                        <td>
+                            <form method="POST" th:action="@{/dosen/daftar-dosbing/} + ${dosbing.id}">
+                                <button type="button" class="btn btn-color" data-bs-toggle="modal" data-bs-target="#confirm">Pilih</button>
+                                <div th:replace="fragments/fragment :: modal"></div>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:unless="*{listDosbing.size() != 0}">
+                <div class="d-flex flex-column align-items-center">
+                    <h2 class="p-1 text-center" style="color: grey; font-size: 40px; font-weight: bold;" th:text="'Tidak ada Dosen Pembimbing'"></h2>
+                </div>
+
+            </div>
+        </div>
+        <div class="card align-items-center" style="background-color: white;width: 100%; padding: 0px; margin: 0px; border-radius:10px; border-color:transparent">
+            <a class="btn btn-outline-color" href="/dosen/lihat-dosbing">Kembali</a>
+        </div>
+    </div>
+    <br>
+</div>
+<!-- <script th:replace="fragments/fragment :: scroll"></script> -->
+</div>
+</body>
+
+</html>

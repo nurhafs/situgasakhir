@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<head>
+    <link rel="shortcut icon" type="image/png" th:href="@{img/makara-ui-farmasi.png}">
+    <meta charset="UTF-8">
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+</head>
+<body id="body-pd">
+<nav th:replace="fragments/fragment :: navbar('tugasakhir')"></nav>
+<div class="content container" style="padding-top:48px">
+    <div class="container-md">
+        <div th:if="${message}" th:text="${message}" class="alert alert-info" role="alert"></div>
+        <h2 style="text-align: left">Daftar Seluruh User</h2>
+        <br>
+        <table class="table" style="background-color: #daddfc; text-align: center;">
+            <thead class="thead-light">
+            <tr>
+                <th scope="col">No</th>
+                <th scope="col">Username</th>
+                <th scope="col">Role</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user, iterationStatus: ${listUser}"
+                th:style="${iterationStatus.even} ? 'background-color: #F7F6FB;'">
+                <td th:text="${iterationStatus.count}"></td>
+                <td th:text="${user.username}"></td>
+                <td th:text="${user.getRole().getNama()}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <a class="btn btn-second-user" href="/">Home</a>
+        <a th:href="@{/user/add}" class="mx-2 btn btn-first-user float-right">Tambah User Baru</a>
+    </div>
+    <br>
+    <!--<div th:replace="fragments/fragment :: footer"></div>-->
+
+</div>
+</body>
+
+</html>

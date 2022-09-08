@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+  <link rel="shortcut icon" type="image/png" th:href="@{img/makara-ui-farmasi.png}">
+  <meta charset="UTF-8">
+  <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+  <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+</head>
+<body id="body-pd">
+<nav th:replace="fragments/fragment :: navbar('dosbing')"></nav>
+<div class="content container">
+  <div class="card m-4 p-4">
+      <div class="justify-content-center">
+        <h2 style="font-weight: bold;">Detail Dosen</h2>
+        <br>
+        <p th:text="'Id Dosen : ' + ${dosen.id}"></p>
+        <p th:text="'Nama Dosen : ' + ${dosen.nama}"></p>
+        <p th:text="'Username :  ' + ${dosen.penggunaDosen.username}"></p>
+        <p th:text="'Kuota Bimbingan :  ' + 10"></p>
+        <p th:text="'Jumlah Mahasiswa Bimbingan : ' + ${dosen.jumlahMahasiswa}"></p>
+        <p th:text="'Jumlah Pelamar : ' + ${dosen.jumlahPelamar}"></p>
+        <br>
+        <div class="col">
+          <div th:if="*{listMahasiswaBimbingan.size() != 0}">
+              <table class="table table-hover">
+                <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Nama Mahasiswa</th>
+                  <th>NPM Mahasiswa</th>
+                  <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="mahasiswa, iterationStatus : ${listMahasiswaBimbingan}"
+                    th:style="${iterationStatus.even} ? 'background-color: #F7F6FB;'">
+                  <td th:text="${iterationStatus.count}"></td>
+                  <td th:text="${mahasiswa.username}"></td>
+                  <td th:text="${mahasiswa.npm}"></td>
+                  <td>
+                    <a class="btn btn-sm btn-color" th:href="@{'/mahasiswa/detail/' + ${mahasiswa.username}}">Lihat Detail</a>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+          </div>
+          <div th:unless="*{listMahasiswaBimbingan.size() != 0}">
+            <p>Tidak ada mahasiswa yang dibimbing oleh dosen ini.</p>
+          </div>
+    </div>
+    <div style="text-align: left">
+        <a th:href="@{/dosen/ubah/} + ${dosen.id}" sec:authorize="hasAnyAuthority('Admin Prodi', 'Admin Fakultas')" class="btn btn-color" th:text="Ubah"></a>
+        <a class="btn btn-outline-color md-4" href="/dosen/lihat-dosbing">Kembali</a>
+    </div>
+    
+  </div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <link rel="shortcut icon" type="image/png" th:href="@{img/makara-ui-farmasi.png}">
+    <meta charset="UTF-8">
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+</head>
+
+<body id="body-pd">
+<nav th:replace="fragments/fragment :: navbar('dosbing')"></nav>
+<div class="content container">
+    <div class="card m-4 p-4">
+            <div class="justify-content-center">
+                <h2>Ubah Dosen</h2>
+                <br>
+                <form th:action="@{/dosen/ubah}" th:object="${dosen}" method="POST">
+
+                    <input type="hidden" class="form-control" name="id" th:value="*{id}">
+
+                    <input type="hidden" class="form-control" name="jumlahMahasiswa" th:value="*{jumlahMahasiswa}">
+
+                    <input type="hidden" class="form-control" name="jumlahPelamar" th:value="*{jumlahPelamar}">
+
+                    <input type="hidden" class="form-control" name="penggunaDosen" th:value="*{penggunaDosen.id}"/>
+
+<!--                    <input type="hidden" class="form-control" name="penggunaDosen.id" th:value="*{penggunaDosen.id}"/>-->
+
+                    Nama Dosen <br>
+                    <input class="form-control" type="text" name="nama" th:value="*{nama}"/>
+                    <br>
+
+                    Username Dosen <br>
+                    <input class="form-control" type="text" name="username" th:value="*{penggunaDosen.username}"/>
+                    <br>
+
+                    <input class="form-control" type="hidden" name="password" th:value="*{penggunaDosen.password}"/>
+
+                    <input class="form-control" type="hidden" name="password" th:value="*{penggunaDosen.prodiPengguna}"/>
+
+                    Apakah Dosen merupakan Dosen Pembimbing? <br>
+                    <div>
+                        <input type="radio" name="isDosenPembimbing" value=1>
+                        <label>Ya</label>
+                        <br>
+                        <input type="radio" name="isDosenPembimbing" value=0>
+                        <label>Tidak</label>
+                    </div>
+                    <br>
+
+                    Apakah Dosen merupakan Dosen Penguji? <br>
+                    <div>
+                        <input type="radio" name="isDosenPenguji" value=1>
+                        <label>Ya</label>
+                        <br>
+                        <input type="radio" name="isDosenPenguji" value=0>
+                        <label>Tidak</label>
+                    </div>
+                    <br>
+
+                    <button class="btn btn-color" type="submit">Simpan</button>
+                    <a class="btn btn-outline-color" href="/dosen/lihat-dosbing">Batal</a>
+                </form>
+        </div>
+</div>
+</div>
+</body>
+
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/png" th:href="@{img/makara-ui-farmasi.png}">
+  <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+  <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+</head>
+
+<body id="body-pd">
+<nav th:replace="fragments/fragment :: navbar('dosbing')"></nav>
+<div class="content container">
+  <div class="card m-4 p-4">
+      <div class="justify-content-center">
+        <h2 style="font-weight: bold;">Tambah Dosen</h2>
+        <br>
+        <form th:action="@{/dosen/tambah}" th:object="${dosen}" method="POST">
+
+            <input type="hidden" class="form-control" name="jumlahMahasiswa" th:value=0>
+
+            <input type="hidden" class="form-control" name="jumlahPelamar" th:value=0>
+
+            Nama Dosen <br>
+            <input required class="form-control" type="text" name="nama"/>
+            <br>
+
+            Username Dosen <br>
+            <input required class="form-control" type="text" name="username"/>
+            <br>
+
+            Password Dosen <br>
+            <input required class="form-control" type="password" name="password"/>
+            <br>
+
+            Apakah Dosen merupakan Dosen Pembimbing? <br>
+            <div>
+                <input required type="radio" name="isDosenPembimbing" value=1>
+                <label>Ya</label>
+                <br>
+                <input type="radio" name="isDosenPembimbing" value=0>
+                <label>Tidak</label>
+            </div>
+            <br>
+
+            Apakah Dosen merupakan Dosen Penguji? <br>
+            <div>
+                <input required type="radio" name="isDosenPenguji" value=1>
+                <label>Ya</label>
+                <br>
+                <input type="radio" name="isDosenPenguji" value=0>
+                <label>Tidak</label>
+            </div>
+            <br>
+
+            <button class="btn btn-color" type="submit">Simpan</button>
+            <a class="btn btn-color" href="/dosen/lihat-dosbing">Batal</a>
+          </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<head>
+    <link rel="shortcut icon" type="image/png" th:href="@{img/makara-ui-farmasi.png}">
+    <meta charset="UTF-8">
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+</head>
+<body id="body-pd">
+<nav th:replace="fragments/fragment :: navbar('tugasakhir')"></nav>
+<div class="content container" style="padding-top:48px">
+    <div class="container-md">
+        <h2 style="font-weight: bold;">Berkas Mahasiswa</h2>
+        <br>
+        <div th:if="${message}" th:text="${message}" class="alert alert-info" role="alert"></div>
+        <br>
+        <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col" style="text-align: center">Tipe Berkas</th>
+                  <th scope="col" style="text-align: center">Nama File</th>
+                  <th style="text-align: center">Status</th>
+                  <th style="text-align: center">Terakhir Diubah</th>
+                  <th colspan="2" style="text-align: center">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="berkas, iterationStatus : ${listBerkas}"
+              th:style="${iterationStatus.even} ? 'background-color: #F7F6FB;'">
+                <td style="text-align: center" th:text="${berkas.jenisBerkas.nama}"></td>
+                  <div th:if="${berkas.statusBerkas} != null">
+                      <td style="text-align: center" th:text="${berkas.nama}"></td>
+                      <td style="text-align: center" th:text="${berkas.statusBerkas.nama}"></td>
+                      <td style="text-align: center" th:text="${#temporals.format(berkas.lastUpdated, 'dd-MM-yyyy HH:mm')}"></td>
+                      <td><a class="btn btn-warning" th:href="@{/tugasakhir/berkas/} + ${berkas.jenisBerkas.id}">Update Berkas</a></td>
+                      <div th:if="${berkas.statusBerkas.nama} != 'Disetujui'">
+                          <td>
+                              <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirm" th:attr="data-bs-target='#confirm'+${berkas.id}">
+                                  Hapus Berkas
+                              </button>
+                              <div class="modal fade" id="confirm" th:attr="id='confirm' + ${berkas.id}" style="width: 100%" aria-labelledby="exampleModalLabel">
+                                  <div class="modal-dialog">
+                                      <div class="modal-content">
+                                          <div class="modal-header">
+                                              <h5 class="modal-title" id="exampleModalLabel">Konfirmasi</h5>
+                                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                          </div>
+                                          <div class="modal-body">
+                                              Apakah anda yakin?
+                                          </div>
+                                          <div class="modal-footer">
+                                              <button type="button" class="btn btn-color-2" data-bs-dismiss="modal">Batal</button>
+                                              <a th:href="@{/tugasakhir/hapus-berkas/} + ${berkas.id}">
+                                                  <button class="btn btn-color" type="submit" name="action">Lanjutkan</button>
+                                              </a>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </td>
+                      </div>
+                  </div>
+                  <div th:if="${berkas.statusBerkas} == null">
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td colspan="2"><a class="btn btn-info" th:href="@{/tugasakhir/berkas/} + ${berkas.jenisBerkas.id}">Upload Berkas</a></td>
+                  </div>
+              </tr>
+            </tbody>
+        </table>
+    </div>
+<br>
+<!--<div th:replace="fragments/fragment :: footer"></div>-->
+
+</div>
+</body>
+
+</html>

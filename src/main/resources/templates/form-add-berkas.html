@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<head>
+    <link rel="shortcut icon" type="image/png" th:href="@{img/makara-ui-farmasi.png}">
+    <meta charset="UTF-8">
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link th:href="@{/css/mdb.min.css}" rel="stylesheet">
+    <link th:href="@{/css/berkas.css}" rel="stylesheet">
+
+    <!-- SCRIPTS -->
+    <!-- JQuery -->
+    <script type="text/javascript" th:src="@{/js/jquery-3.6.0.min.js}"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" th:src="@{/js/popper.min.js}"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" th:src="@{/js/mdb.js}"></script>
+
+</head>
+<body id="body-pd">
+<nav th:replace="fragments/fragment :: navbar('tugasakhir')"></nav>
+<div class="content container" style="padding-top:4px">
+
+<section>
+    <form th:action="@{/tugasakhir/berkas}" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="idBerkas" th:value="${idBerkas}">
+        <div class="content container">
+            <h2 style="font-weight: bold;">Upload file</h2>
+            <hr>
+            <br>
+            <div class="row">
+                <div class="col-md-12">
+                    <div>
+                        <div class="alert alert-danger" role="alert" th:if="${alert}" th:text="${alert}"></div>
+
+                        <div class="alert alert-info" role="alert">
+                            <p>Catatan:</p>
+                            <ul>
+                                <li>Maksimal size : 30MB</li>
+                            </ul>
+                        </div>
+                        <hr>
+                    </div>
+                    <div class="form-group">
+
+                        <div class="preview-zone hidden">
+                            <div class="box box-solid">
+                                <div class="box-header with-border">
+                                    <div><b>Preview</b></div>
+                                    <div class="box-tools pull-right">
+                                        <button type="button" class="btn btn-color btn-xs remove-preview">
+                                            <i class="fa fa-times"></i> Hapus file
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="box-body"></div>
+                            </div>
+                        </div>
+                        <div class="dropzone-wrapper">
+                            <div class="dropzone-desc">
+                                <i class="glyphicon glyphicon-download-alt"></i>
+                                <p>Pilih file atau <i>drag</i> ke sini.</p>
+                            </div>
+                            <input type="file" id="input-file-now" required class="dropzone form-control form-control-lg file-upload" name="file" data-max-file-size="30M"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-color">Upload</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
+<script type="text/javascript" th:src="@{/js/addBerkas.js}"></script>
+</div>
+</body>
+
+</html>
+

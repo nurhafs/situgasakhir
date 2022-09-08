@@ -1,0 +1,202 @@
+<html lang="en"
+      xmlns:th="http://thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<head>
+    <link rel="shortcut icon" type="image/png" th:href="@{img/makara-ui-farmasi.png}">
+    <meta charset="UTF-8">
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+
+    <script sec:authorize="hasAnyAuthority('Admin Prodi', 'Admin Fakultas')" th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            var listJadwalNS = [[${listJadwalNS}]];
+            var listKeperluanNS = [[${listKeperluan}]];
+            var listDosenNS = [[${listDosen}]];
+
+            var listSidang = [[${listSidang}]];
+            var listJenisSidang = [[${listJenisSidang}]];
+            var listMahasiswa = [[${listMahasiswa}]];
+
+            var events = [];
+
+            for (let i = 0; i < listJadwalNS.length; i++) {
+                const event = {};
+                event.title = listKeperluanNS[i] + " " + listDosenNS[i];
+                event.start = listJadwalNS[i].tanggalMulai.slice(0, 10) + 'T' + listJadwalNS[i].waktuMulai;
+                event.end = listJadwalNS[i].tanggalSelesai.slice(0, 10) + 'T' + listJadwalNS[i].waktuSelesai;
+                if (listKeperluanNS[i] == 'Urusan Dinas') {
+                    event.color = "#03fca1";
+                } else if (listKeperluanNS[i] == 'Seminar') {
+                    event.color = "#8803fc";
+                } else if (listKeperluanNS[i] == 'Rapat') {
+                    event.color = "#fc03a1";
+                } else {
+                    event.color = "#fcb503";
+                }
+                event.url = "/jadwal/non-sidang/detail/" + listJadwalNS[i].id;
+                events.push(event);
+            }
+
+            for (let i = 0; i < listSidang.length; i++) {
+                const event = {};
+                event.title = listJenisSidang[i] + " " + listMahasiswa[i];
+                event.start = listSidang[i].tanggal.slice(0, 10) + 'T' + listSidang[i].waktuMulai;
+                event.end = listSidang[i].tanggal.slice(0, 10) + 'T' + listSidang[i].waktuSelesai;
+                event.color = "#eb3434";
+                event.url = "/jadwal/sidang/detail/" + listSidang[i].id
+
+                events.push(event);
+            }
+
+            let date = new Date();
+            const offset = date.getTimezoneOffset();
+            date = new Date(date.getTime() - (offset*60*1000))
+            date = date.toISOString().split('T')[0];
+
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                initialDate: date,
+                navLinks: true, // can click day/week names to navigate views
+                selectable: true,
+                selectMirror: true,
+                editable: false, //buat ngedrag / resize
+                dayMaxEvents: true, // allow "more" link when too many events
+                events: events
+            });
+            calendar.render();
+        });
+    </script>
+
+    <script sec:authorize="hasAnyAuthority('Dosen')" th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            var listJadwalNS = [[${listJadwalNSDosen}]];
+            var listKeperluanNS = [[${listKeperluanDosen}]];
+            var dosen = [[${dosen}]];
+
+            var listSidang = [[${listSidangDosen}]];
+            var listJenisSidang = [[${listJenisSidangDosen}]];
+            var listMahasiswaDosen = [[${listMahasiswaDosen}]];
+
+            var events = [];
+
+            if (listJadwalNS.length > 0) {
+                for (let i = 0; i < listJadwalNS.length; i++) {
+                    const event = {};
+                    event.title = listKeperluanNS[i] + " " + dosen;
+                    event.start = listJadwalNS[i].tanggalMulai.slice(0, 10) + 'T' + listJadwalNS[i].waktuMulai;
+                    event.end = listJadwalNS[i].tanggalSelesai.slice(0, 10) + 'T' + listJadwalNS[i].waktuSelesai;
+
+                    if (listKeperluanNS[i] == 'Urusan Dinas') {
+                        event.color = "#03fca1";
+                    } else if (listKeperluanNS[i] == 'Seminar') {
+                        event.color = "#8803fc";
+                    } else if (listKeperluanNS[i] == 'Rapat') {
+                        event.color = "#fc03a1";
+                    } else {
+                        event.color = "#fcb503";
+                    }
+
+                    event.url = "/jadwal/non-sidang/detail/" + listJadwalNS[i].id;
+                    events.push(event);
+                }
+            }
+
+            for (let i = 0; i < listSidang.length; i++) {
+                const event = {};
+                event.title = listJenisSidang[i] + " " + listMahasiswaDosen[i];
+                event.start = listSidang[i].tanggal.slice(0, 10) + 'T' + listSidang[i].waktuMulai;
+                event.end = listSidang[i].tanggal.slice(0, 10) + 'T' + listSidang[i].waktuSelesai;
+                event.color = "#eb3434";
+                event.url = "/jadwal/sidang/detail/" + listSidang[i].id
+
+                events.push(event);
+            }
+
+            let date = new Date();
+            const offset = date.getTimezoneOffset();
+            date = new Date(date.getTime() - (offset*60*1000))
+            date = date.toISOString().split('T')[0];
+
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                initialDate: date,
+                navLinks: true, // can click day/week names to navigate views
+                selectable: true,
+                selectMirror: true,
+                editable: false, //buat ngedrag / resize
+                dayMaxEvents: true, // allow "more" link when too many events
+                events: events
+            });
+            calendar.render();
+        });
+    </script>
+</head>
+<body id="body-pd">
+<nav th:replace="fragments/fragment :: navbar('jadwal')"></nav>
+<div class="content container">
+
+        <h2 style="font-weight:bold;">Lihat Seluruh Jadwal</h2>
+        <br>
+
+        <div class="row">
+            <div sec:authorize="hasAnyAuthority('Admin Prodi', 'Admin Fakultas')" class="col col-sm-2">
+                <a class="btn btn-color btn-md" href="/jadwal/sidang/tambah">Tambah Jadwal Sidang</a>
+            </div>
+            <div sec:authorize="hasAnyAuthority('Admin Prodi', 'Admin Fakultas', 'Dosen')" class="col col-sm-2">
+                <a class="btn btn-color btn-md" href="/jadwal/non-sidang/tambah">Tambah Jadwal Kegiatan</a>
+            </div>
+        </div>
+    <br>
+    <div sec:authorize="hasAnyAuthority('Admin Prodi', 'Admin Fakultas')">
+        <form th:action="@{/jadwal}" method="GET">
+            <table class="table table-borderless">
+                <thead>
+                <tr>
+                    <th><label>Nama Dosen</label></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="col-lg-11">
+                        <select name="namaDosen" class="form-select">
+                            <option th:value="@{null}"></option>
+                            <option th:each="dosen : ${listDosenFilter}" th:value="${dosen.id}" th:text="${dosen.nama}"></option>
+                        </select>
+                    </td>
+                    <td class="col-lg-1"><button type="submit" class="btn btn-color">Cari</button></td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <br>
+    <div th:if="${message}" th:text="${message}" class="alert alert-info" role="alert"></div>
+    <br>
+    <div class="calendar" id="calendar"></div>
+    <br>
+    <h>Legend:</h>
+    <br>
+    <ul class="legend">
+        <li><span class="sidang"></span> Sidang</li>
+        <li><span class="urusan-dinas"></span> Urusan Dinas</li>
+        <li><span class="seminar"></span> Seminar</li>
+        <li><span class="rapat"></span> Rapat</li>
+        <li><span class="lainnya"></span> Lainnya</li>
+    </ul>
+
+
+</div>
+</body>
+
+</html>

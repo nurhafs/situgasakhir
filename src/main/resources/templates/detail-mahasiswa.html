@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<head>
+    <link rel="shortcut icon" type="image/png" th:href="@{img/makara-ui-farmasi.png}">
+    <meta charset="UTF-8">
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+</head>
+<body id="body-pd">
+<nav th:replace="fragments/fragment :: navbar('mahasiswa')"></nav>
+<div class="content container">
+        <div class="card m-4 p-4">
+                <div class="justify-content-center">
+                    <h2 style="font-weight: bold;">Detail Mahasiswa</h2>
+                    <br>
+                    <table class="table table-borderless">
+                        <tbody>
+                        <tr>
+                            <td>Username Mahasiswa</td>
+                            <td th:text="': '+${mahasiswa.getUsername()}"></td>
+                        </tr>
+                        <tr>
+                            <td>Nama Mahasiswa</td>
+                            <td th:text="': '+${penggunaMhs.getUsername()}"></td>
+                        </tr>
+                        <tr>
+                            <td>Program Studi</td>
+                            <td th:text="': '+${mahasiswa.getPenggunaMahasiswa().getProdiPengguna().getNama()}"></td>
+                        </tr>
+                        <tr>
+                            <td>NPM Mahasiswa</td>
+                            <td th:text="': '+${mahasiswa.getNpm()}"></td>
+                        </tr>
+                        <tr>
+                            <td>Dosen Pembimbing</td>
+                            <td th:text="': '+${namaDosen}"></td>
+                        </tr>
+                        <tr>
+                            <td>Tahap Tugas Akhir</td>
+                            <td th:if="${mahasiswa.getTahapTugasAkhir()} == null">: Belum ada tahapan Tugas Akhir.</td>
+                            <td th:if="${mahasiswa.getTahapTugasAkhir()} != null" th:text="': '+${mahasiswa.getTahapTugasAkhir().getNama()}"></td>
+                        </tr>
+                        <tr>
+                            <td>Jenis Sidang</td>
+                            <td th:if="${mahasiswa.getListSidang().isEmpty()} == true">: Belum ada sidang</td>
+                            <td th:if="${mahasiswa.getListSidang().isEmpty()} == false" th:text="': '+${jenisSidang}">
+                        </tr>
+                        </tbody>
+                    </table>
+                    <br>
+                </div>
+                <div style="text-align:left;">
+                    <a class="btn btn-outline-color md-4" href="/mahasiswa">Kembali</a>
+                </div>
+                
+        </div>
+</div>
+</body>
+</html>

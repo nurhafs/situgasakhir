@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+</head>
+<style>
+    .btn-color {
+        background-color: #31368E;
+        color: white;
+        letter-spacing: 0.05em;
+
+    }
+    a:hover {
+        background-color: #A7A9CC;
+    }
+
+</style>
+<body id="body-pd">
+<nav th:replace="fragments/fragment :: navbar('home')"></nav>
+<div class="content container">
+            <div class="justify-content-center">
+                <div>
+                    <h2 style="color: black; font-family: 'Poppins'; font-weight: bold;">
+                        Sistem Informasi <span style="color: #31368E">Tugas Akhir</span>
+                    </h2>
+                    <h5 style="color: #666666;" th:text="'Selamat datang, ' + ${name} + '!'">Selamat datang!</h5>
+                    <div style="padding-bottom:6px;">
+                        <a sec:authorize="hasAnyAuthority('Admin Prodi')" class="btn btn-color rounded" th:href="@{/informasi/tambah}">+ Tambah Informasi Dashboard</a>
+                        <a sec:authorize="hasAnyAuthority('Admin Fakultas')" class="btn btn-color rounded" th:href="@{/informasi/tambah}">+ Tambah Informasi Dashboard</a>
+                    </div>
+                    <div th:if="${message}">
+                        <br>
+                        <div th:text="${message}" class="alert alert-info" role="alert"></div>
+                    </div> 
+
+                    <tr th:each="informasi : ${listInformasi}">
+                            <div style="margin-top: 24px">
+                                <div style="margin-top: 40px; border-top-left-radius: 9px; border-top-right-radius: 9px; background: #CECFE0; font-weight: bold;">
+                                    <div style="padding-top:12px; padding-bottom:12px; padding-left: 12px; font-size: 24px; color: #686983; font-weight: bold;"><td th:text="${informasi.judul}"></td></div>
+                                </div>
+                                <div style="background-color: #F7F6FB; color:black; border-width: 0px 1px 1px; border-style: none solid solid; border-color: currentcolor rgb(221, 221, 221) rgb(221, 221, 221); border-image: none 100% / 1 / 0 stretch; padding: 15px; border-bottom-right-radius: 9px; border-bottom-left-radius: 9px">
+
+                                    <td th:utext="${informasi.isi}"></td>
+                                    <div>
+                                        <a th:href="@{/informasi/download/} + ${informasi.id}" th:text="${informasi.namaFile}"></a>
+                                        <div style="font-weight: bold; font-size: small; padding-top: 12px">Time Posted</div>
+                                        <div style="text-align:left; font-size: small">
+                                            <td th:text="${#dates.format(informasi.tanggal, 'dd-MMM-yyyy')} + ', '"></td>
+                                            <td th:text="${informasi.waktu}"></td>
+                                        </div>
+                                    </div>
+
+                                    <div sec:authorize="hasAnyAuthority('Admin Prodi', 'Admin Fakultas')">
+                                        <td><div style="text-align:right;"><a th:href="@{/informasi/ubah/} + ${informasi.id}">Update</a> <a data-bs-toggle="modal" th:attr="data-bs-target='#confirm'+${informasi.id}" href="">Delete</a></div></td>
+                                    </div>
+
+                                    <div class="modal fade" id="confirm" th:attr="id='confirm' + ${informasi.id}" style="width: 100%" aria-labelledby="exampleModalLabel">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Konfirmasi</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Apakah anda yakin?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-color-2" data-bs-dismiss="modal">Batal</button>
+                                                    <a th:href="@{/informasi/delete/} + ${informasi.id}">
+                                                        <button class="btn btn-color" type="submit" name="action">Lanjutkan</button>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </tr>
+                </div>
+            </div>
+            <br>
+            <div th:if="${currentPage <= totalPages}">
+                <nav>
+                    <ul class="pagination justify-content-center">
+                        <div th:if="${currentPage != 1}">
+                            <li class="page-item">
+                                <a class="page-link" href="/informasi?page=1" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        </div>
+
+                        <li th:if="${currentPage == 1}" class="page-item disabled">
+                            <a class="page-link" tabindex="-1">Sebelumnya</a>
+                        </li>
+
+                        <li th:if="${currentPage != 1}" class="page-item" th:classappend="${pageNumber == currentPage} ? active">
+                            <a class="page-link" th:href="@{/informasi(page=${previousPage})}">Sebelumnya</a>
+                        </li>
+
+                        <div th:if="${listInformasi.totalPages > 0}" class="pagination"
+                             th:each="pageNumber : ${pageNumbers}">
+                            <li class="page-item" th:classappend="${pageNumber == currentPage} ? active">
+                                <a class="page-link" th:href="@{/informasi(page=${pageNumber})}"
+                                   th:text=${pageNumber}></a>
+                            </li>
+                        </div>
+
+                        <li th:if="${currentPage == totalPages}" class="page-item disabled">
+                            <a class="page-link" tabindex="-1">Selanjutnya</a>
+                        </li>
+
+                        <li th:if="${currentPage != totalPages}" class="page-item">
+                            <a class="page-link" th:href="@{/informasi(page=${nextPage})}">Selanjutnya</a>
+                        </li>
+
+                        <div th:if="${currentPage != totalPages}">
+                            <li class="page-item">
+                                <a class="page-link" th:href="@{/informasi(page=${totalPages})}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </div>
+                    </ul>
+                </nav>
+
+            </div>
+        </div>
+</div>
+
+<div th:replace="fragments/fragment :: footer"></div>
+</body>
+
+</html>

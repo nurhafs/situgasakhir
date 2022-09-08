@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+</head>
+<body>
+<nav th:replace="fragments/fragment :: navbar('jadwal')"></nav>
+<div class="content container">
+    <div class="card m-4 p-4">
+        <div class="justify-content-center">
+            <h2 style="font-weight: bold;">Tambah Sidang</h2>
+            <br>
+            <form th:action="@{/jadwal/sidang/tambah}" th:object="${sidang}" method="POST">
+
+                <input type="hidden" class="form-control" name="id" th:value=0>
+
+                Jenis Sidang <br>
+                <select required name="jenisSidang" th:value="*{jenisSidang}">
+                    <option value="">Pilih jenis sidang</option>
+                    <option th:each="jenisSidang : ${listJenisSidang}"
+                            th:value="${jenisSidang.id}"
+                            th:text="${jenisSidang.nama}"></option>
+                </select>
+                <br><br>
+
+                Mahasiswa <br>
+                <select required name="mahasiswaSidang" th:value="*{mahasiswaSidang}" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
+                    <option value="">Pilih mahasiswa yang akan disidang</option>
+                    <option th:each="mahasiswa : ${listMahasiswa}"
+                            th:value="${mahasiswa.id}"
+                            th:text="${mahasiswa.username}"></option>
+                </select>
+                <br><br>
+
+                Tanggal Sidang <br>
+                <input required class="form-control" type="date" name="tanggal"/>
+                <br><br>
+
+                Waktu Mulai Sidang <br>
+                <input required class="form-control" type="time" name="waktuMulai"/>
+                <br><br>
+
+                Waktu Selesai Sidang <br>
+                <input required class="form-control" type="time" name="waktuSelesai"/>
+                <br><br>
+
+                Ruangan <br>
+                <input class="form-control" type="text" name="ruangan"/>
+                <br><br>
+
+                <center><h2>Partisipan Sidang</h2></center>
+                <br>
+                <center>
+                    <a class="btn btn-info" name="addRow" th:href="@{/jadwal/sidang/tambah/tambah-partisipan}">Tambah Partisipan</a>
+                    <a class="btn btn-danger" name="removeRow" th:href="@{/jadwal/sidang/tambah/kurang-partisipan}">Kurangi Partisipan</a>
+                </center>
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <!-- <th>Dosen Penguji</th>
+                        <th>
+                            <button type="submit" name="addRow"  class="btn btn-color">Tambah Dosen Penguji</button>
+                        </th> -->
+                        <th>Dosen</th>
+                        <th>Sebagai</th>
+                    </tr>
+                    </thead>
+                    <br>
+                    <tbody>
+                    <!-- <tr th:each="partisipanSidangBaru, iterationStatus : ${sidang.listPartisipanSidang}">
+                        <td class="col-lg-3">
+                            <select name="id" th:field="*{listPartisipanSidang[__${iterationStatus.index}__].id}" class="form-control">
+                                <option value="">Pilih Dosen Partisipan Sidang</option>
+                                <option th:each="partisipanSidang : ${existingListPartisipanSidang}"
+                                        th:value="${partisipanSidang.partisipanSidangDosen.id}"
+                                        th:text="${partisipanSidang.partisipanSidangDosen.nama}"></option>
+                            </select>
+                            <br>
+                        </td>
+                        <td><button type="submit" name="removeRow" th:value="${iterationStatus.index}" class="btn btn-danger">Hapus</button></td>
+                    </tr> -->
+                    <tr th:each="count : ${#numbers.sequence(1, {counter})}">
+                        <td class="col-lg-9">
+                            <select name="dosenId" class="form-control">
+                                <option th:each="dosen : ${listDosen}"
+                                        th:value="${dosen.id}"
+                                        th:text="${dosen.nama}"></option>
+                            </select>
+                        </td>
+                        <td class="col-lg-3">
+                            <select name="rolePartisipanSidangId" class="form-control">
+                                <option th:each="role : ${listRolePartisipanSidang}"
+                                        th:value="${role.id}"
+                                        th:text="${role.nama}"></option>
+                            </select>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <button class="btn btn-color" type="submit" name="save">Simpan</button>
+                <a class="btn btn-outline-color" href="/jadwal">Batal</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+
+        // Initialize select2
+        $("#selUser").select2();
+
+        // Read selected option
+        $('#but_read').click(function(){
+            var username = $('#selUser option:selected').text();
+            var userid = $('#selUser').val();
+
+            $('#result').html("id : " + userid + ", name : " + username);
+
+        });
+    });
+</script>
+
+</body>
+</html>

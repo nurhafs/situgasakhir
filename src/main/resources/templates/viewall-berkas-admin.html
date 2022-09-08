@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <link rel="shortcut icon" type="image/png" th:href="@{img/makara-ui-farmasi.png}">
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</head>
+
+<body id="body-pd">
+<nav th:replace="fragments/fragment :: navbar('tugasakhir')"></nav>
+<div class="content container">
+    <h2 style="font-weight:bold; color:#3B3B3B">Pengecekan Berkas</h2> <br>
+        <form th:action="@{/tugasakhir/berkas/viewall}" method="GET">
+            <table class="table table-borderless">
+                <thead>
+                    <tr>
+                        <th><label>Jenis Berkas</label></th>
+                        <th><label>Program Studi</label></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <select name="jenisBerkas" class="form-select">
+                                <option th:value="@{null}"></option>
+                                <option th:each="jenis : ${listJenisBerkas}" th:value="${jenis.id}" th:text="${jenis.nama}"></option>
+                            </select>
+                        </td>
+                        <td>
+                            <select name="programStudi" class="form-select">
+                                <option th:value="@{null}"></option>
+                                <option th:each="prodi : ${listProdi}" th:value="${prodi.id}" th:text="${prodi.nama}"></option>
+                            </select>
+                        </td>
+                        <td><button type="submit" class="btn btn-color">Cari</button></td>
+                    </tr>
+                </tbody>
+            </table>            
+        </form>
+
+        <div th:if="${checked == true}">
+            <a class="btn btn-color" th:href="@{/tugasakhir/berkas/viewall?checked=false}">Berkas yang belum dicek</a>
+        </div>
+        <div th:unless="${checked == true}">
+            <a class="btn btn-color" th:href="@{/tugasakhir/berkas/viewall?checked=true}">Berkas yang sudah dicek</a>
+        </div>
+        <br>
+        <div th:if="${message}" th:text="${message}" class="alert alert-info" role="alert"></div>
+
+        <form th:action="@{/tugasakhir/berkas/setuju}" id="formfield" th:object="${berkasContainer}" method="POST">
+            <div th:if="${listBerkas.size != 0}">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <div th:unless="${checked == true}">
+                            <th style="width:6%">Pilih</th>
+                        </div>
+                        <th scope="col">Nama Berkas</th>
+                        <th>Mahasiswa</th>
+                        <th>Status</th>
+                        <th>Terakhir Diubah</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                        <tbody>
+                            <tr th:each="berkas, iterationStatus : ${listBerkas}"
+                            th:style="${iterationStatus.even} ? 'background-color: #F7F6FB;'">
+                                    <div th:unless="${checked == true}">
+                                        <td style="text-align: center;">
+                                            <input class="form-check-input" type="checkbox" th:field="*{semua}" th:value="${berkas.id}" id="flexCheckDefault">
+                                        </td>
+                                    </div>
+                                    <td th:text="${berkas.jenisBerkas.nama}"></td>
+                                    <td th:text="${berkas.berkasMahasiswa.username}"></td>
+                                    <td th:text="${berkas.statusBerkas.nama}"></td>
+                                    <td th:text="${#temporals.format(berkas.lastUpdated, 'dd-MM-yyyy HH:mm')}"></td>
+                                    <td><a class="btn btn-info" th:href="@{/tugasakhir/berkas/download/} + ${berkas.berkasMahasiswa.id} + @{/} + ${berkas.jenisBerkas.id}">Download</a></td>
+                            </tr>
+                            </tbody>
+                </table>
+                <div th:unless="${checked == true}">
+                    <button type="button" class="btn btn-color" data-bs-toggle="modal" data-bs-target="#confirm">
+                        Setuju
+                    </button>
+                
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#reject">
+                        Tolak
+                    </button>
+                </div>
+                <a class="btn btn-outline-color" th:href="@{/informasi?page=1}">Kembali</a>
+            </div>
+
+            <div th:unless="${listBerkas.size != 0}">
+                <h3 style="font-weight: bold;">Tidak ada berkas</h3>
+                <a class="btn btn-outline-color" th:href="@{/informasi?page=1}">Kembali</a>
+            </div>
+            
+
+            
+
+            <div th:replace="fragments/fragment :: modal"></div>
+            
+            <!-- Modal Tolak -->
+            <div class="modal fade" id="reject" style="width: 100%" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Konfirmasi</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Apakah anda yakin?
+                            </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-color-2" data-bs-dismiss="modal">Batal</button>
+                            <button class="btn btn-color" name="action" th:formaction="@{/tugasakhir/berkas/tolak}">Lanjutkan</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
+
+        <script>
+            var inputs = document.getElementsByTagName('input');
+            for (var i=0; i<inputs.length; i++)  {
+            if (inputs[i].type == 'checkbox')   {
+                inputs[i].checked = false;
+            }
+            }
+        </script>
+
+</div>
+</body>
+
+</html>

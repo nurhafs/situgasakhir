@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+  <link rel="shortcut icon" type="image/png" th:href="@{img/makara-ui-farmasi.png}">
+  <meta charset="UTF-8">
+  <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+  <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+</head>
+<body>
+<nav th:replace="fragments/fragment :: navbar('jadwal')"></nav>
+<div class="content container">
+  <div class="card m-4 p-4">
+      <div class="justify-content-center">
+        <h2>Ubah Jadwal Kegiatan</h2>
+        <div th:if="${message}" th:text="${message}" class="alert alert-danger" role="alert"></div>
+        <br>
+        <form th:action="@{/jadwal/non-sidang/ubah}" th:object="${jadwalNonSidangModel}" method="POST">
+
+          <input type="hidden" class="form-control" name="id" th:value="*{id}">
+
+          Nama Dosen <span style="color:red;">*</span><br>
+          <select name="dosen" id="dosen">
+            <option value="">Pilih Dosen</option>
+            <option th:each="dosen : ${listDosen}"
+                    th:value="${dosen.id}"
+                    th:text="${dosen.nama}"
+                    th:selected="${dosen==jadwalNonSidangModel.dosen}"></option>
+          </select>
+          <br><br>
+
+          Jenis Kegiatan <span style="color:red;">*</span><br>
+          <select name="keperluan" id="keperluan">
+            <option value=""></option>
+            <option th:each="keperluan : ${listKeperluan}"
+                    th:value="${keperluan.id}"
+                    th:text="${keperluan.nama}"
+                    th:selected="${keperluan==jadwalNonSidangModel.keperluan}"></option>
+          </select>
+          <br><br>
+
+          Tanggal Mulai Kegiatan <span style="color:red;">*</span><br>
+          <input required class="form-control" type="date" name="tanggalMulai" th:value="${{jadwalNonSidangModel.tanggalMulai}}"/>
+          <br><br>
+
+          Tanggal Selesai Kegiatan <span style="color:red;">*</span><br>
+          <input required class="form-control" type="date" name="tanggalSelesai" th:value="${{jadwalNonSidangModel.tanggalSelesai}}"/>
+          <br><br>
+
+          Waktu Mulai <span style="color:red;">*</span><br>
+          <input required class="form-control" type="time" name="waktuMulai" th:value="${jadwalNonSidangModel.waktuMulai}"/>
+          <br><br>
+
+          Waktu Selesai <span style="color:red;">*</span><br>
+          <input required class="form-control" type="time" name="waktuSelesai" th:value="${jadwalNonSidangModel.waktuSelesai}"/>
+          <br><br>
+
+          Informasi Tambahan <br>
+          <input class="form-control" type="text" name="deskripsi" th:value="${jadwalNonSidangModel.deskripsi}"/>
+          <br><br>
+
+
+
+          <button type="button" class="btn btn-color" data-bs-toggle="modal" data-bs-target="#confirm">Simpan</button>
+          <a class="btn btn-outline-color" href="/jadwal">Batal</a>
+          <div th:replace="fragments/fragment :: modal"></div>
+
+        </form>
+
+        <!-- <script>
+            function myFunction() {
+              document.getElementById("tm").value = "banana";
+            }
+            </script> -->
+      </div>
+  </div>
+</div>
+
+</body>
+</html>

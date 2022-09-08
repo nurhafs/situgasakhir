@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <link rel="shortcut icon" type="image/png" th:href="@{img/makara-ui-farmasi.png}">
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+</head>
+
+<body id="body-pd">
+    <div th:replace="fragments/fragment :: navbar('lamaran')"></div>
+    <div class="content container">
+                <h2 th:text="'Lamaran telah diterima'"></h2>
+                <div sec:authorize="hasAnyAuthority('Admin Prodi')">
+                    <h3>Lamaran akan diteruskan ke Admin Fakultas</h3>
+                </div>
+                <table class="table table-borderless">
+                    <tr>
+                        <td>
+                            <p>Berhasil disetujui:</p>
+                            <ul th:each="lm : ${berhasil}">
+                                <li th:text="${lm.lamaranMahasiswa.username}"></li>
+                            </ul>
+                        </td>
+                        <div th:if="${gagal.size != 0}">
+                            <td>
+                                <p>Gagal disetujui:</p>
+                                <ul th:each="lmr : ${gagal}">
+                                    <li th:text="${lmr.lamaranMahasiswa.username}"></li>
+                                </ul>
+                                <p>Dosen yang dilamar telah mencapai kuota 10 mahasiswa.</p>
+                                <p>Seluruh mahasiswa yang gagal disetujui akan ditolak secara otomatis oleh sistem.</p>
+                            </td>
+                        </div>
+                        <div th:unless="${gagal.size != 0}"></div>
+                    </tr>
+                </table>
+                <br> <br> <br> <br>
+                <div class="card align-items-center" style="background-color: white;width: 100%; padding: 0px; margin: 0px; border-radius:10px; border-color:transparent">
+                    <a class="btn btn-color" href="/admin/daftar-lamaran">Kembali</a>
+                </div>
+    </div>
+</body>
+</html>

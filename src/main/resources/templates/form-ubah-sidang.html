@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="shortcut icon" type="image/png" th:href="@{img/makara-ui-farmasi.png}">
+    <meta charset="UTF-8">
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+</head>
+<body>
+<nav th:replace="fragments/fragment :: navbar('jadwal')"></nav>
+<div class="content container">
+    <div class="card m-4 p-4">
+        <div class="card-body">
+            <div class="justify-content-center">
+                <h2>Ubah Sidang</h2>
+                <br>
+                <form th:action="@{/jadwal/sidang/ubah}" th:object="${sidang}" method="POST">
+
+                    <input type="hidden" class="form-control" name="id" th:value=${sidang.id}>
+                    <input type="hidden" class="form-control" name="jenisSidang" th:value="${sidang.jenisSidang.id}">
+                    <input type="hidden" class="form-control" name="mahasiswaSidang" th:value="${sidang.mahasiswaSidang.id}">
+                    <input type="hidden" class="form-control" name="listPartisipanSidang" th:field="${sidang.listPartisipanSidang}">
+
+                    Jenis Sidang <br>
+                    <select disabled name="jenisSidang" th:value="${sidang.jenisSidang.id}">
+                        <option th:value="${sidang.jenisSidang.id}" th:text="${sidang.jenisSidang.nama}"></option>
+                    </select>
+                    <br><br>
+
+                    Mahasiswa <br>
+                    <select disabled name="mahasiswaSidang" th:value="${sidang.mahasiswaSidang.id}">
+                        <option th:value="${sidang.mahasiswaSidang.id}" th:text="${sidang.mahasiswaSidang.username}"></option>
+                    </select>
+                    <br><br>
+
+                    Tanggal Sidang <br>
+                    <input required class="form-control" type="date" name="tanggal" th:value="${{sidang.tanggal}}"/>
+                    <br><br>
+
+                    Waktu Mulai Sidang <br>
+                    <input required class="form-control" type="time" name="waktuMulai" th:value="${sidang.waktuMulai}"/>
+                    <br><br>
+
+                    Waktu Selesai Sidang <br>
+                    <input required class="form-control" type="time" name="waktuSelesai" th:value="${sidang.waktuSelesai}"/>
+                    <br><br>
+                    <center><h2>Partisipan Sidang</h2></center>
+                    
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Dosen</th>
+                                <th>Sebagai</th>
+                            </tr>
+                        </thead>
+                        <br>
+                        <tbody>
+                            <tr th:each="partisipan : ${sidang.listPartisipanSidang}">
+                                <th th:text="${partisipan.partisipanSidangDosen.nama}"></th>
+                                <th th:text="${partisipan.rolePartisipanSidang.nama}"></th>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <button type="button" class="btn btn-color" data-bs-toggle="modal" data-bs-target="#update">
+                        Ubah
+                        </button>
+                        <div class="modal fade" id="update" style="width: 100%" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Konfirmasi</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Apakah anda yakin?
+                                    </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                    <button class="btn btn-color" type="submit" name="action" th:formaction="@{/jadwal/sidang/ubah}">Lanjutkan</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="btn btn-danger" th:href="@{/jadwal/sidang/detail/} + ${sidang.id}">Batal</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+        $(document).ready(function(){
+
+        // Initialize select2
+        $("#selUser").select2();
+
+        // Read selected option
+        $('#but_read').click(function(){
+            var username = $('#selUser option:selected').text();
+            var userid = $('#selUser').val();
+
+            $('#result').html("id : " + userid + ", name : " + username);
+
+        });
+    });
+</script>
+
+</body>
+</html>
